@@ -1,0 +1,1035 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Krajobraz i jego ochrona – jak człowiek zmienia przestrzeń</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Karla:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    
+    img{border-radius: 15px;}
+/* ===================== TOKENS ===================== */
+:root{
+  --ink:#1E2A1C;
+  --ink-soft:#46523F;
+  --paper:#EFE8D6;
+  --paper-deep:#E2D9BE;
+  --white:#FBF8EF;
+  --moss:#46603C;
+  --moss-light:#7C9C66;
+  --clay:#A8552E;
+  --water:#356473;
+  --wheat:#B5852A;
+  --radius:16px;
+  --shadow:0 8px 24px rgba(30,40,25,.14);
+  --maxw:1100px;
+  --font-display:'Fraunces',serif;
+  --font-body:'Karla',sans-serif;
+  --font-mono:'IBM Plex Mono',monospace;
+}
+
+/* ===================== RESET ===================== */
+*,*::before,*::after{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  margin:0;
+  font-family:var(--font-body);
+  color:var(--ink);
+  background-color:var(--paper);
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='160'%3E%3Cpath d='M0 30 Q55 5 110 30 T220 30' stroke='%231E2A1C' stroke-width='1' fill='none' opacity='0.12'/%3E%3Cpath d='M0 80 Q55 55 110 80 T220 80' stroke='%231E2A1C' stroke-width='1' fill='none' opacity='0.09'/%3E%3Cpath d='M0 130 Q55 105 110 130 T220 130' stroke='%231E2A1C' stroke-width='1' fill='none' opacity='0.07'/%3E%3C/svg%3E");
+  line-height:1.6;
+}
+img{max-width:100%;display:block;}
+button{font-family:inherit;cursor:pointer;}
+ul{margin:0;padding:0;}
+h1,h2,h3{font-family:var(--font-display);margin:0 0 .5em;line-height:1.15;}
+p{margin:0 0 1em;}
+a{color:var(--moss);}
+.visually-hidden{position:absolute;left:-9999px;}
+:focus-visible{outline:3px solid var(--water);outline-offset:3px;}
+
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto;}
+  *{animation-duration:.001ms !important;animation-iteration-count:1 !important;transition-duration:.001ms !important;}
+}
+
+/* ===================== LAYOUT HELPERS ===================== */
+.wrap{max-width:var(--maxw);margin:0 auto;padding:0 24px;}
+.eyebrow{
+  font-family:var(--font-mono);
+  font-size:.78rem;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+  color:var(--moss);
+  display:inline-block;
+  margin-bottom:.6em;
+}
+.lead{font-size:1.08rem;color:var(--ink-soft);max-width:640px;}
+
+.reveal{opacity:0;transform:translateY(18px);transition:opacity .6s ease, transform .6s ease;}
+.reveal.is-visible{opacity:1;transform:none;}
+
+/* photo placeholder slots --------------------------------- */
+.photo-slot{
+  position:relative;
+  background:linear-gradient(135deg,var(--paper-deep),var(--white));
+  border:2px dashed var(--moss-light);
+  border-radius:var(--radius);
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  text-align:center;
+  color:var(--ink-soft);
+  padding:18px;
+  min-height:180px;
+  overflow:hidden;
+}
+.photo-slot img{width:100%;height:100%;object-fit:cover;border-radius:calc(var(--radius) - 2px);}
+.photo-slot svg{width:34px;height:34px;opacity:.55;}
+.photo-slot span{font-family:var(--font-mono);font-size:.78rem;max-width:280px;}
+.photo-slot.--16x9{aspect-ratio:16/9;}
+.photo-slot.--4x3{aspect-ratio:4/3;}
+.photo-slot.--square{aspect-ratio:1/1;}
+
+/* ===================== HEADER / NAV ===================== */
+.site-header{
+  position:sticky;top:0;z-index:50;
+  background:rgba(239,232,214,.92);
+  backdrop-filter:blur(6px);
+  border-bottom:1px solid var(--paper-deep);
+}
+.site-header .wrap{
+  display:flex;align-items:center;justify-content:space-between;
+  height:64px;
+}
+.brand{
+  font-family:var(--font-display);
+  font-weight:600;font-size:1.25rem;color:var(--ink);text-decoration:none;
+  display:flex;align-items:center;gap:8px;
+}
+.brand svg{width:22px;height:22px;color:var(--moss);}
+.main-nav ul{display:flex;gap:4px;list-style:none;flex-wrap:wrap;}
+.main-nav a{
+  font-family:var(--font-mono);font-size:.74rem;letter-spacing:.03em;
+  text-decoration:none;color:var(--ink-soft);
+  padding:8px 10px;border-radius:8px;
+}
+.main-nav a:hover,.main-nav a.is-active{background:var(--moss);color:var(--white);}
+.nav-toggle{display:none;background:none;border:1px solid var(--ink-soft);border-radius:8px;padding:8px 10px;}
+.nav-toggle svg{width:20px;height:20px;}
+
+@media (max-width:880px){
+  .nav-toggle{display:block;}
+  .main-nav{
+    position:absolute;top:64px;left:0;right:0;background:var(--paper);
+    border-bottom:1px solid var(--paper-deep);
+    max-height:0;overflow:hidden;transition:max-height .35s ease;
+  }
+  .main-nav.is-open{max-height:420px;}
+  .main-nav ul{flex-direction:column;padding:12px 24px 18px;}
+}
+
+/* ===================== HERO ===================== */
+.hero{padding:72px 0 56px;}
+.hero .wrap{display:grid;grid-template-columns:1.1fr .9fr;gap:48px;align-items:center;}
+.hero h1{font-size:clamp(2.1rem,4.4vw,3.4rem);}
+.hero h1 em{font-style:italic;color:var(--moss);}
+.hero .photo-slot{min-height:280px;}
+.btn{
+  font-family:var(--font-mono);font-size:.85rem;letter-spacing:.02em;
+  border:none;border-radius:999px;padding:13px 26px;
+  background:var(--moss);color:var(--white);
+  display:inline-flex;align-items:center;gap:8px;
+  text-decoration:none;
+  transition:transform .2s ease, background .2s ease;
+}
+.btn:hover{background:var(--ink);transform:translateY(-2px);}
+.btn.--ghost{background:transparent;color:var(--ink);border:1.5px solid var(--ink);}
+.btn.--ghost:hover{background:var(--ink);color:var(--white);}
+
+@media (max-width:760px){
+  .hero .wrap{grid-template-columns:1fr;}
+}
+
+/* ===================== TRACK / WAYPOINTS ===================== */
+main{position:relative;}
+.track-section{
+  display:grid;grid-template-columns:96px 1fr;gap:32px;
+  max-width:var(--maxw);margin:0 auto;padding:54px 24px 14px;
+  position:relative;
+}
+.track-section::before{ /* connecting rail */
+  content:"";position:absolute;left:71px;top:0;bottom:-14px;width:3px;
+  background:repeating-linear-gradient(to bottom, var(--ink-soft) 0 6px, transparent 6px 14px);
+  opacity:.35;
+}
+.track-section:first-of-type::before{top:54px;}
+.track-section:last-of-type::before{display:none;}
+.waypoint{
+  width:64px;height:64px;border-radius:50%;
+  background:var(--white);border:3px solid var(--moss);
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--font-mono);font-weight:600;font-size:1.05rem;
+  position:relative;z-index:1;justify-self:center;
+}
+.track-section.--clay .waypoint{border-color:var(--clay);color:var(--clay);}
+.track-section.--water .waypoint{border-color:var(--water);color:var(--water);}
+.track-section.--wheat .waypoint{border-color:var(--wheat);color:var(--wheat);}
+.track-section.--moss .waypoint{border-color:var(--moss);color:var(--moss);}
+.track-section.--neutral .waypoint{border-color:var(--ink-soft);color:var(--ink-soft);}
+
+.section-body h2{font-size:clamp(1.5rem,2.6vw,2rem);}
+.section-body .lead{margin-bottom:1.2em;}
+.section-card{
+  background:var(--white);border-radius:var(--radius);box-shadow:var(--shadow);
+  padding:28px;margin-top:18px;
+}
+.tag-list{display:flex;flex-wrap:wrap;gap:10px;list-style:none;margin:1em 0;}
+.tag-list li{
+  font-family:var(--font-mono);font-size:.8rem;background:var(--paper-deep);
+  border-radius:999px;padding:7px 14px;
+}
+
+@media (max-width:720px){
+  .track-section{grid-template-columns:1fr;gap:14px;padding:40px 18px 8px;}
+  .track-section::before{display:none;}
+  .waypoint{justify-self:start;width:52px;height:52px;font-size:.95rem;}
+}
+
+/* ===================== SEC 01 — CARDS ===================== */
+.cards-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:18px;}
+.land-card{
+  background:var(--white);border:2px solid var(--paper-deep);border-radius:var(--radius);
+  text-align:left;padding:18px;
+}
+.land-card button{
+  width:100%;background:none;border:none;text-align:left;padding:0;
+  font-family:var(--font-display);font-size:1.08rem;font-weight:600;color:var(--ink);
+  display:flex;justify-content:space-between;align-items:center;
+}
+.land-card button .plus{font-family:var(--font-mono);font-size:1.3rem;color:var(--moss);transition:transform .25s ease;}
+.land-card[data-open="true"] button .plus{transform:rotate(45deg);}
+.land-card .card-detail{
+  max-height:0;overflow:hidden;transition:max-height .35s ease;
+  font-size:.92rem;color:var(--ink-soft);
+}
+.land-card[data-open="true"] .card-detail{max-height:220px;margin-top:10px;}
+.card-example{font-family:var(--font-mono);font-size:.78rem;color:var(--moss);margin-top:8px;display:block;}
+
+@media (max-width:880px){.cards-grid{grid-template-columns:repeat(2,1fr);}}
+@media (max-width:520px){.cards-grid{grid-template-columns:1fr;}}
+
+/* ===================== SEC 02 — HOTSPOTS ===================== */
+.hotspot-wrap{display:grid;grid-template-columns:1.2fr .8fr;gap:24px;margin-top:18px;align-items:start;}
+.hotspot-image{position:relative;}
+.hotspot-image .photo-slot{min-height:320px;}
+.hotspot{
+  position:absolute;width:34px;height:34px;border-radius:50%;
+  background:var(--wheat);border:3px solid var(--white);color:var(--white);
+  font-family:var(--font-mono);font-weight:700;
+  display:flex;align-items:center;justify-content:center;
+  transform:translate(-50%,-50%);box-shadow:0 2px 8px rgba(0,0,0,.25);
+}
+.hotspot:hover,.hotspot.is-active{background:var(--ink);}
+.hotspot-panel{
+  background:var(--white);border-radius:var(--radius);box-shadow:var(--shadow);
+  padding:22px;min-height:200px;
+}
+.hotspot-panel h3{color:var(--wheat);font-size:1.1rem;}
+@media (max-width:760px){.hotspot-wrap{grid-template-columns:1fr;}}
+
+/* ===================== SEC 03 — THREAT QUIZ ===================== */
+.threat-list{list-style:none;margin-top:18px;display:flex;flex-direction:column;gap:10px;}
+.threat-item{
+  background:var(--white);border-radius:12px;padding:14px 16px;
+  display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap;
+  border-left:5px solid var(--paper-deep);
+}
+.threat-item.is-correct{border-left-color:var(--moss);}
+.threat-item.is-wrong{border-left-color:var(--clay);}
+.threat-item p{margin:0;flex:1;min-width:200px;}
+.threat-actions{display:flex;gap:8px;}
+.threat-actions button{
+  border:1.5px solid var(--ink-soft);background:none;border-radius:999px;
+  padding:8px 14px;font-family:var(--font-mono);font-size:.78rem;
+}
+.threat-actions button:disabled{opacity:.4;cursor:default;}
+.threat-actions button.chosen{background:var(--ink);color:var(--white);}
+.threat-feedback{font-family:var(--font-mono);font-size:.8rem;min-width:90px;text-align:right;}
+.score-bar{
+  margin-top:16px;display:flex;justify-content:space-between;align-items:center;
+  font-family:var(--font-mono);font-size:.85rem;background:var(--paper-deep);
+  border-radius:12px;padding:10px 16px;
+}
+
+/* ===================== SEC 04 — MAP ===================== */
+.map-wrap{display:grid;grid-template-columns:1.3fr .7fr;gap:24px;margin-top:18px;}
+.map-stage{
+  position:relative;background:linear-gradient(160deg,#cfd9b8,#9fb588 60%,#84a173);
+  border-radius:var(--radius);min-height:340px;overflow:hidden;box-shadow:var(--shadow);
+}
+.map-stage::after{
+
+  position:absolute;bottom:8px;left:12px;font-family:var(--font-mono);font-size:.66rem;color:rgba(255,255,255,.85);
+}
+.map-pin{
+  position:absolute;transform:translate(-50%,-100%);background:none;border:none;padding:0;
+}
+.map-pin svg{width:30px;height:38px;filter:drop-shadow(0 3px 4px rgba(0,0,0,.35));}
+.map-pin path{fill:var(--water);}
+.map-pin.is-active path{fill:var(--clay);}
+.map-info{background:var(--white);border-radius:var(--radius);box-shadow:var(--shadow);padding:22px;min-height:200px;}
+.map-info h3{color:var(--water);font-size:1.05rem;}
+@media (max-width:760px){.map-wrap{grid-template-columns:1fr;}}
+
+/* ===================== SEC 05 — BEFORE/AFTER ===================== */
+.ba-wrap{position:relative;margin-top:18px;border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);}
+.ba-layer{position:relative;}
+.ba-layer .photo-slot{min-height:320px;border-radius:0;}
+.ba-after{position:absolute;top:0;left:0;width:100%;height:100%;overflow:hidden;}
+.ba-label{
+  position:absolute;top:14px;font-family:var(--font-mono);font-size:.72rem;
+  background:rgba(30,42,28,.78);color:var(--white);padding:5px 11px;border-radius:999px;z-index:2;
+}
+.ba-label.--before{left:14px;}
+.ba-label.--after{right:14px;}
+.ba-range{width:100%;margin-top:14px;accent-color:var(--moss);}
+
+/* ===================== SEC 06 — ECO FARM ===================== */
+.eco-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-top:18px;}
+.choice-row{background:var(--white);border-radius:12px;padding:16px;box-shadow:var(--shadow);}
+.choice-row p{font-family:var(--font-mono);font-size:.76rem;color:var(--ink-soft);margin:0 0 8px;text-transform:uppercase;letter-spacing:.04em;}
+.choice-btns{display:flex;gap:8px;}
+.choice-btn{
+  flex:1;border:2px solid var(--paper-deep);background:var(--paper);border-radius:10px;
+  padding:10px;font-size:.85rem;text-align:center;
+}
+.choice-btn[aria-pressed="true"]{border-color:var(--moss);background:var(--moss);color:var(--white);}
+.eco-gauge{margin-top:22px;background:var(--white);border-radius:var(--radius);box-shadow:var(--shadow);padding:20px;}
+.eco-gauge-track{height:18px;background:var(--paper-deep);border-radius:999px;overflow:hidden;}
+.eco-gauge-fill{height:100%;width:0%;background:linear-gradient(90deg,var(--wheat),var(--moss));transition:width .4s ease;}
+.eco-gauge p{font-family:var(--font-mono);font-size:.82rem;margin-top:10px;}
+
+@media (max-width:600px){.eco-grid{grid-template-columns:1fr;}}
+
+/* ===================== SEC 08 — GALLERY ===================== */
+.gallery-filters{display:flex;gap:8px;flex-wrap:wrap;margin:18px 0;}
+.filter-btn{
+  border:1.5px solid var(--ink-soft);background:none;border-radius:999px;
+  padding:8px 16px;font-family:var(--font-mono);font-size:.78rem;
+}
+.filter-btn[aria-pressed="true"]{background:var(--ink);color:var(--white);border-color:var(--ink);}
+.gallery-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;}
+.gallery-item{cursor:pointer;border:none;background:none;padding:0;text-align:left;}
+.gallery-item .photo-slot{min-height:140px;padding:0;border:none;}
+.gallery-item.is-hidden{display:none;}
+.gallery-item figcaption{font-family:var(--font-mono);font-size:.72rem;margin-top:6px;color:var(--ink-soft);}
+.lightbox{
+  position:fixed;inset:0;background:rgba(20,26,17,.82);display:none;
+  align-items:center;justify-content:center;z-index:100;padding:24px;
+}
+.lightbox.is-open{display:flex;}
+.lightbox-content{background:var(--white);border-radius:var(--radius);max-width:560px;width:100%;padding:24px;position:relative;}
+.lightbox-close{position:absolute;top:14px;right:14px;background:none;border:none;font-size:1.4rem;line-height:1;color:var(--ink);z-index:10;}
+
+@media (max-width:880px){.gallery-grid{grid-template-columns:repeat(2,1fr);}}
+
+/* ===================== SEC 09 — FINAL QUIZ ===================== */
+.quiz-question{background:var(--white);border-radius:12px;box-shadow:var(--shadow);padding:18px 20px;margin-bottom:14px;}
+.quiz-question legend{font-family:var(--font-display);font-weight:600;margin-bottom:8px;padding:0;}
+.quiz-option{display:flex;align-items:flex-start;gap:10px;padding:7px 0;font-size:.95rem;}
+.quiz-option input{margin-top:3px;accent-color:var(--moss);}
+.quiz-result{background:var(--white);border-radius:var(--radius);box-shadow:var(--shadow);padding:26px;text-align:center;margin-top:18px;display:none;}
+.quiz-result.is-visible{display:block;}
+.quiz-result .score{font-family:var(--font-mono);font-size:2.4rem;color:var(--moss);}
+.badge{width:84px;height:84px;margin:10px auto;}
+
+/* ===================== FOOTER ===================== */
+footer{margin-top:60px;padding:36px 0 50px;border-top:1px solid var(--paper-deep);text-align:center;}
+footer p{font-family:var(--font-mono);font-size:.78rem;color:var(--ink-soft);}
+</style>
+</head>
+<body>
+
+<a href="#glowna" class="visually-hidden">Przejdź do treści głównej</a>
+
+<header class="site-header">
+  <div class="wrap">
+    <a href="#glowna" class="brand">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 18l5-7 4 5 3-4 6 6"/></svg>
+      Krajobraz
+    </a>
+    <button class="nav-toggle" aria-expanded="false" aria-controls="main-nav" aria-label="Otwórz menu">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+    </button>
+    <nav class="main-nav" id="main-nav">
+      <ul>
+        <li><a href="#sec-pojecie">Pojęcie</a></li>
+        <li><a href="#sec-kulturowy">Kulturowy</a></li>
+        <li><a href="#sec-zagrozenia">Zagrożenia</a></li>
+        <li><a href="#sec-ochrona">Ochrona</a></li>
+        <li><a href="#sec-rewitalizacja">Rewitalizacja</a></li>
+        <li><a href="#sec-rolnictwo">Rolnictwo eko</a></li>
+        <li><a href="#sec-galeria">Galeria</a></li>
+        <li><a href="#sec-quiz">Quiz</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<!-- ===================== HERO ===================== -->
+<section class="hero" id="glowna">
+  <div class="wrap">
+    <div class="reveal is-visible">
+      <span class="eyebrow">Projekt edukacyjny</span>
+      <h1>Krajobraz i jego <em>ochrona</em></h1>
+      <p class="lead">Krajobraz powstaje ze współpracy przyrody i ludzkich decyzji. Każda droga, pole i park to wybór, który zmienia sposób, w jaki wygląda i funkcjonuje przestrzeń wokół nas. Zobacz, czym jest krajobraz, co mu grozi i jak możemy o niego dbać.</p>
+      <a href="#sec-pojecie" class="btn">Poznaj temat ↓</a>
+    </div>
+    
+      <img src="obraz1.jpeg">
+   
+  </div>
+</section>
+
+<main>
+
+  <!-- ===================== 01 — POJĘCIE KRAJOBRAZU ===================== -->
+  <section class="track-section --moss" id="sec-pojecie">
+    <div class="waypoint">01</div>
+    <div class="section-body">
+      <h2 class="reveal">Czym właściwie jest krajobraz?</h2>
+      <p class="lead reveal">Krajobraz to wszystko, co widać w danym miejscu: ukształtowanie terenu, wodę i roślinność, ale też budynki, drogi i pola. Przyroda i działalność człowieka splatają się tu w jeden, wspólny obraz przestrzeni.</p>
+
+      <div class="cards-grid reveal">
+        <article class="land-card" data-open="false">
+          <button type="button" aria-expanded="false">Naturalny <span class="plus">+</span></button>
+          <div class="card-detail">
+            <p>Niewiele zmieniony przez człowieka – dominują w nim lasy, jeziora i naturalna rzeźba terenu.</p>
+            <span class="card-example">Przykład: Bieszczady, Puszcza Białowieska</span>
+          </div>
+        </article>
+        <article class="land-card" data-open="false">
+          <button type="button" aria-expanded="false">Kulturowy <span class="plus">+</span></button>
+          <div class="card-detail">
+            <p>Ukształtowany przez wieki ludzkiej działalności – widać w nim historię miejsca.</p>
+            <span class="card-example">Przykład: stare miasta, wiejskie zagrody, aleje przydrożne</span>
+          </div>
+        </article>
+        <article class="land-card" data-open="false">
+          <button type="button" aria-expanded="false">Miejski <span class="plus">+</span></button>
+          <div class="card-detail">
+            <p>Zdominowany przez zabudowę, ulice i infrastrukturę.</p>
+            <span class="card-example">Przykład: centra miast, dzielnice mieszkaniowe</span>
+          </div>
+        </article>
+        <article class="land-card" data-open="false">
+          <button type="button" aria-expanded="false">Rolniczy <span class="plus">+</span></button>
+          <div class="card-detail">
+            <p>Uformowany przez uprawę ziemi i hodowlę zwierząt.</p>
+            <span class="card-example">Przykład: pola, sady, łąki kośne</span>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== 02 — KRAJOBRAZ KULTUROWY ===================== -->
+  <section class="track-section --wheat" id="sec-kulturowy">
+    <div class="waypoint">02</div>
+    <div class="section-body">
+      <h2 class="reveal">Krajobraz kulturowy – ślady ludzkiej historii</h2>
+      <p class="lead reveal">Krajobraz kulturowy powstaje tam, gdzie ludzie mieszkają od pokoleń. Tworzą go miasta, wsie, zabytki, drogi i pola uprawne – każdy element coś opowiada.</p>
+      <ul class="tag-list reveal">
+        <li>Pokazuje historię i kulturę miejsca</li>
+        <li>Wpływa na tożsamość mieszkańców</li>
+        <li>Bywa atrakcją turystyczną</li>
+      </ul>
+
+      <div class="hotspot-wrap reveal">
+        <div class="hotspot-image">
+         
+            <img src="obraa2.png" width="150%" height="150%">
+          
+          <button class="hotspot is-active" style="top:30%;left:25%" data-title="Zabudowa tradycyjna" data-text="Stare domy i zagrody pokazują, jak ludzie budowali, korzystając z lokalnych materiałów i sprawdzonych rozwiązań.">A</button>
+          <button class="hotspot" style="top:65%;left:55%" data-title="Droga" data-text="Drogi i aleje wytyczają trasy używane od pokoleń – łączą wieś z miastem i kształtują układ zabudowy.">B</button>
+          <button class="hotspot" style="top:75%;left:78%" data-title="Pole uprawne" data-text="Pola pokazują, jak ludzie od wieków organizowali pracę na ziemi – ich układ często nie zmienił się od stuleci.">C</button>
+          <button class="hotspot" style="top:23%;left:73%" data-title="Zabytek" data-text="Kościoły, dwory i pomniki świadczą o ważnych wydarzeniach i wartościach, jakimi żyła dana społeczność.">D</button>
+        </div>
+        <div class="hotspot-panel" id="hotspot-panel">
+          <h3 id="hotspot-title">Zabudowa tradycyjna</h3>
+          <p id="hotspot-text">Stare domy i zagrody pokazują, jak ludzie budowali, korzystając z lokalnych materiałów i sprawdzonych rozwiązań.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== 03 — ZAGROŻENIA ===================== -->
+  <section class="track-section --clay" id="sec-zagrozenia">
+    <div class="waypoint">03</div>
+    <div class="section-body">
+      <h2 class="reveal">Co niszczy krajobraz?</h2>
+      <p class="lead reveal">Krajobraz traci wartość, gdy zabudowa rośnie bez planu, zieleń ustępuje betonowi, a zabytki niszczeją z zaniedbania.</p>
+      <ul class="tag-list reveal">
+        <li>Wycinanie lasów</li>
+        <li>Niszczenie zabytków</li>
+        <li>Chaotyczna zabudowa</li>
+        <li>Zaśmiecanie przestrzeni</li>
+      </ul>
+
+      <div class="section-card reveal">
+        <h3 style="font-size:1.05rem;margin-bottom:.2em;">Quiz: czy to pomaga chronić krajobraz?</h3>
+        <p style="font-size:.85rem;color:var(--ink-soft);">Oceń każdą sytuację.</p>
+        <ul class="threat-list" id="threat-list">
+          <li class="threat-item" data-answer="szkodzi">
+            <p>Budowa osiedla bez planu przestrzennego, prosto na łące.</p>
+            <div class="threat-actions">
+              <button data-choice="pomaga">Pomaga</button>
+              <button data-choice="szkodzi">Szkodzi</button>
+            </div>
+            <span class="threat-feedback"></span>
+          </li>
+          <li class="threat-item" data-answer="pomaga">
+            <p>Odnowienie zabytkowego budynku zamiast jego wyburzenia.</p>
+            <div class="threat-actions">
+              <button data-choice="pomaga">Pomaga</button>
+              <button data-choice="szkodzi">Szkodzi</button>
+            </div>
+            <span class="threat-feedback"></span>
+          </li>
+          <li class="threat-item" data-answer="szkodzi">
+            <p>Wycięcie starej aleksji drzew pod nowy parking.</p>
+            <div class="threat-actions">
+              <button data-choice="pomaga">Pomaga</button>
+              <button data-choice="szkodzi">Szkodzi</button>
+            </div>
+            <span class="threat-feedback"></span>
+          </li>
+          <li class="threat-item" data-answer="pomaga">
+            <p>Tworzenie ścieżek edukacyjnych w parku krajobrazowym.</p>
+            <div class="threat-actions">
+              <button data-choice="pomaga">Pomaga</button>
+              <button data-choice="szkodzi">Szkodzi</button>
+            </div>
+            <span class="threat-feedback"></span>
+          </li>
+          <li class="threat-item" data-answer="szkodzi">
+            <p>Zasypanie stawu, by zrobić miejsce na magazyn.</p>
+            <div class="threat-actions">
+              <button data-choice="pomaga">Pomaga</button>
+              <button data-choice="szkodzi">Szkodzi</button>
+            </div>
+            <span class="threat-feedback"></span>
+          </li>
+          <li class="threat-item" data-answer="pomaga">
+            <p>Sadzenie rodzimych gatunków drzew w mieście.</p>
+            <div class="threat-actions">
+              <button data-choice="pomaga">Pomaga</button>
+              <button data-choice="szkodzi">Szkodzi</button>
+            </div>
+            <span class="threat-feedback"></span>
+          </li>
+        </ul>
+        <div class="score-bar">
+          <span>Wynik</span>
+          <span id="threat-score">0 / 6</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== 04 — OCHRONA ===================== -->
+  <section class="track-section --water" id="sec-ochrona">
+    <div class="waypoint">04</div>
+    <div class="section-body">
+      <h2 class="reveal">Jak chronimy krajobraz?</h2>
+      <p class="lead reveal">Ochrona krajobrazu to świadome decyzje: zachowanie zabytków, terenów zielonych i przemyślane planowanie nowej zabudowy.</p>
+      <ul class="tag-list reveal">
+        <li>Parki krajobrazowe</li>
+        <li>Ochrona zabytków</li>
+        <li>Planowanie przestrzenne</li>
+        <li>Tradycyjne elementy krajobrazu</li>
+      </ul>
+
+      <div class="map-wrap reveal">
+        <div class="map-stage" id="map-stage">
+            <img src="obraz3.png">
+          <button class="map-pin is-active" style="top:23%;left:81%" data-title="Suwalski Park Krajobrazowy" data-text="Pojezierny krajobraz na Suwalszczyźnie, z wzgórzami morenowymi i głazami pozostałymi po epoce lodowcowej.">
+            <svg viewBox="0 0 24 30"><path d="M12 0C5 0 0 5 0 12c0 8 12 18 12 18s12-10 12-18c0-7-5-12-12-12z"/></svg>
+          </button>
+          <button class="map-pin" style="top:16%;left:39%" data-title="Kaszubski Park Krajobrazowy" data-text="Krajobraz pojezierny na Pomorzu, znany z licznych jezior i charakterystycznych wzgórz morenowych.">
+            <svg viewBox="0 0 24 30"><path d="M12 0C5 0 0 5 0 12c0 8 12 18 12 18s12-10 12-18c0-7-5-12-12-12z"/></svg>
+          </button>
+          <button class="map-pin" style="top:48%;left:85%" data-title="Park Krajobrazowy Doliny Bugu" data-text="Krajobraz nadrzeczny zachowany w naturalnym stanie, ważny dla wielu gatunków ptaków wodnych.">
+            <svg viewBox="0 0 24 30"><path d="M12 0C5 0 0 5 0 12c0 8 12 18 12 18s12-10 12-18c0-7-5-12-12-12z"/></svg>
+          </button>
+          <button class="map-pin" style="top:78%;left:64%" data-title="Jurajskie Parki Krajobrazowe" data-text="Krajobraz Wyżyny Krakowsko-Częstochowskiej ze skałami wapiennymi, jaskiniami i ruinami średniowiecznych zamków.">
+            <svg viewBox="0 0 24 30"><path d="M12 0C5 0 0 5 0 12c0 8 12 18 12 18s12-10 12-18c0-7-5-12-12-12z"/></svg>
+          </button>
+        </div>
+        <div class="map-info" id="map-info">
+          <h3 id="map-title">Suwalski Park Krajobrazowy</h3>
+          <p id="map-text">Pojezierny krajobraz na Suwalszczyźnie, z wzgórzami morenowymi i głazami pozostałymi po epoce lodowcowej.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== 05 — REWITALIZACJA ===================== -->
+  <section class="track-section --moss" id="sec-rewitalizacja">
+    <div class="waypoint">05</div>
+    <div class="section-body">
+      <h2 class="reveal">Rewitalizacja: druga szansa dla miejsca</h2>
+      <p class="lead reveal">Rewitalizacja to odnowa zdegradowanych obszarów – opuszczonych fabryk, zaniedbanych kamienic czy zarośniętych terenów. Zmienia się nie tylko wygląd, ale też jakość życia mieszkańców.</p>
+      <ul class="tag-list reveal">
+        <li>Odnowa starych budynków</li>
+        <li>Tworzenie terenów zielonych</li>
+        <li>Poprawa infrastruktury</li>
+      </ul>
+
+      <div class="reveal">
+        <div class="ba-wrap">
+          <div class="ba-layer">
+            <div class="photo-slot --16x9" id="img-after" data-label="ten sam obszar PO rewitalizacji – odnowione budynki, zieleń">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 21V9l8-6 8 6v12M9 21v-6h6v6"/></svg>
+              <img src="obraz5.jpg">
+            </div>
+            <span class="ba-label --after">Po</span>
+          </div>
+          <div class="ba-after" id="ba-after">
+            <div class="photo-slot --16x9" id="img-before" data-label="ten sam obszar PRZED rewitalizacją – zaniedbany, zdegradowany" style="height:100%;">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 21h18M5 21V11l4-3 4 3v10M13 21v-6h4v6"/></svg>
+              <img src="obraz4.jpg">
+            </div>
+            <span class="ba-label --before">Przed</span>
+          </div>
+        </div>
+        <input type="range" class="ba-range" id="ba-range" min="0" max="100" value="50" aria-label="Przesuń, aby porównać stan przed i po rewitalizacji">
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== 06 — ROLNICTWO EKOLOGICZNE ===================== -->
+  <section class="track-section --wheat" id="sec-rolnictwo">
+    <div class="waypoint">06</div>
+    <div class="section-body">
+      <h2 class="reveal">Rolnictwo, które oszczędza krajobraz</h2>
+      <p class="lead reveal">Rolnictwo ekologiczne ogranicza wpływ produkcji żywności na środowisko – dba o glebę, wodę i różnorodność biologiczną, korzystając z naturalnych metod.</p>
+
+      <div class="reveal">
+        <p style="font-family:var(--font-mono);font-size:.78rem;color:var(--ink-soft);text-transform:uppercase;letter-spacing:.04em;">Zbuduj swoje gospodarstwo – wybierz jedną opcję w każdym rzędzie</p>
+        <div class="eco-grid" id="eco-grid">
+          <div class="choice-row" data-points="1">
+            <p>Ochrona roślin</p>
+            <div class="choice-btns">
+              <button class="choice-btn" aria-pressed="false" data-eco="0">Środki chemiczne</button>
+              <button class="choice-btn" aria-pressed="false" data-eco="1">Metody naturalne</button>
+            </div>
+          </div>
+          <div class="choice-row" data-points="1">
+            <p>Sposób uprawy</p>
+            <div class="choice-btns">
+              <button class="choice-btn" aria-pressed="false" data-eco="0">Monokultura</button>
+              <button class="choice-btn" aria-pressed="false" data-eco="1">Zmianowanie roślin</button>
+            </div>
+          </div>
+          <div class="choice-row" data-points="1">
+            <p>Woda</p>
+            <div class="choice-btns">
+              <button class="choice-btn" aria-pressed="false" data-eco="0">Brak retencji</button>
+              <button class="choice-btn" aria-pressed="false" data-eco="1">Zbieranie deszczówki</button>
+            </div>
+          </div>
+          <div class="choice-row" data-points="1">
+            <p>Bioróżnorodność</p>
+            <div class="choice-btns">
+              <button class="choice-btn" aria-pressed="false" data-eco="0">Pole bez miedz</button>
+              <button class="choice-btn" aria-pressed="false" data-eco="1">Miedze i pasy kwietne</button>
+            </div>
+          </div>
+        </div>
+        <div class="eco-gauge">
+          <div class="eco-gauge-track"><div class="eco-gauge-fill" id="eco-fill"></div></div>
+          <p id="eco-text">Wybierz opcje, aby zobaczyć, jak ekologiczne jest Twoje gospodarstwo.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== 08 — GALERIA ===================== -->
+  <section class="track-section --neutral" id="sec-galeria">
+    <div class="waypoint">07</div>
+    <div class="section-body">
+      <h2 class="reveal">Galeria krajobrazów</h2>
+      <p class="lead reveal">Zobacz różne oblicza krajobrazu i działania, które pomagają go chronić.</p>
+
+      <div class="gallery-filters reveal" id="gallery-filters">
+        <button class="filter-btn" aria-pressed="true" data-filter="all">Wszystkie</button>
+        <button class="filter-btn" aria-pressed="false" data-filter="naturalny">Naturalny</button>
+        <button class="filter-btn" aria-pressed="false" data-filter="miejski">Miejski</button>
+        <button class="filter-btn" aria-pressed="false" data-filter="kulturowy">Kulturowy</button>
+        <button class="filter-btn" aria-pressed="false" data-filter="rolniczy">Rolniczy</button>
+      </div>
+
+      <div class="gallery-grid reveal" id="gallery-grid">
+        <!-- gallery items injected via data below -->
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== 09 — QUIZ KOŃCOWY ===================== -->
+  <section class="track-section --neutral" id="sec-quiz">
+    <div class="waypoint">08</div>
+    <div class="section-body">
+      <h2 class="reveal">Sprawdź, co zapamiętałeś</h2>
+      <p class="lead reveal">Cztery pytania, jeden wynik – sprawdź swoją wiedzę o krajobrazie i jego ochronie.</p>
+
+      <form id="final-quiz" class="reveal">
+        <fieldset class="quiz-question">
+          <legend>1. Czym jest krajobraz kulturowy?</legend>
+          <label class="quiz-option"><input type="radio" name="q1" value="0">Krajobraz wyłącznie naturalny, bez ingerencji ludzkiej</label>
+          <label class="quiz-option"><input type="radio" name="q1" value="1">Krajobraz ukształtowany przez działalność człowieka</label>
+          <label class="quiz-option"><input type="radio" name="q1" value="0">Krajobraz, który istnieje tylko w miastach</label>
+        </fieldset>
+
+        <fieldset class="quiz-question">
+          <legend>2. Na czym polega rewitalizacja?</legend>
+          <label class="quiz-option"><input type="radio" name="q2" value="0">Na budowie nowych osiedli na łąkach</label>
+          <label class="quiz-option"><input type="radio" name="q2" value="1">Na odnowie zdegradowanych obszarów i poprawie warunków życia</label>
+          <label class="quiz-option"><input type="radio" name="q2" value="0">Na wycinaniu starych drzew w centrach miast</label>
+        </fieldset>
+
+        <fieldset class="quiz-question">
+          <legend>3. Dlaczego chronimy krajobraz?</legend>
+          <label class="quiz-option"><input type="radio" name="q3" value="0">Bo wymaga tego prawo i tylko z tego powodu</label>
+          <label class="quiz-option"><input type="radio" name="q3" value="1">Bo zachowuje wartości przyrodnicze, kulturowe i jakość życia mieszkańców</label>
+          <label class="quiz-option"><input type="radio" name="q3" value="0">Bo krajobraz nigdy się nie zmienia bez ochrony</label>
+        </fieldset>
+
+        <fieldset class="quiz-question">
+          <legend>4. Jak rolnictwo ekologiczne wpływa na środowisko?</legend>
+          <label class="quiz-option"><input type="radio" name="q4" value="0">Zwiększa zużycie chemicznych środków ochrony roślin</label>
+          <label class="quiz-option"><input type="radio" name="q4" value="1">Ogranicza negatywny wpływ produkcji rolnej, chroni glebę i wodę</label>
+          <label class="quiz-option"><input type="radio" name="q4" value="0">Nie ma żadnego wpływu na krajobraz</label>
+        </fieldset>
+
+        <button type="submit" class="btn">Sprawdź wynik</button>
+      </form>
+
+      <div class="quiz-result" id="quiz-result">
+        <svg class="badge" id="quiz-badge" viewBox="0 0 100 100" style="display:none;">
+          <circle cx="50" cy="50" r="42" fill="none" stroke="var(--wheat)" stroke-width="6"/>
+          <path d="M34 52l10 10 22-24" fill="none" stroke="var(--moss)" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <p class="score" id="quiz-score">0%</p>
+        <p id="quiz-feedback"></p>
+        <button type="button" class="btn --ghost" id="quiz-retry">Spróbuj ponownie</button>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- ===================== LIGHTBOX ===================== -->
+<div class="lightbox" id="lightbox">
+  <div class="lightbox-content">
+    <button class="lightbox-close" id="lightbox-close" aria-label="Zamknij">×</button>
+    <div class="photo-slot --4x3" id="lightbox-photo" style="padding:0; border:none;">
+      <!-- Image dynamically loaded -->
+    </div>
+    <p id="lightbox-caption" style="margin-top:12px;font-family:var(--font-mono);font-size:.82rem;"></p>
+  </div>
+</div>
+
+<footer>
+  <div class="wrap">
+    <p>Projekt edukacyjny „Krajobraz i jego ochrona – jak człowiek zmienia przestrzeń”.</p>
+  </div>
+</footer>
+
+<script>
+/* ===================== NAV ===================== */
+function initNav(){
+  const toggle = document.querySelector('.nav-toggle');
+  const nav = document.getElementById('main-nav');
+  toggle.addEventListener('click', () => {
+    const open = nav.classList.toggle('is-open');
+    toggle.setAttribute('aria-expanded', open);
+  });
+  nav.querySelectorAll('a').forEach(a => a.addEventListener('click', () => nav.classList.remove('is-open')));
+
+  const links = nav.querySelectorAll('a');
+  const sections = [...document.querySelectorAll('main .track-section')];
+  const spy = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if(entry.isIntersecting){
+        links.forEach(l => l.classList.remove('is-active'));
+        const match = nav.querySelector('a[href="#' + entry.target.id + '"]');
+        if(match) match.classList.add('is-active');
+      }
+    });
+  }, {rootMargin:'-40% 0px -55% 0px'});
+  sections.forEach(s => spy.observe(s));
+}
+
+/* ===================== REVEAL ===================== */
+function initReveal(){
+  const items = document.querySelectorAll('.reveal');
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => { if(e.isIntersecting){ e.target.classList.add('is-visible'); obs.unobserve(e.target); } });
+  }, {threshold:.15});
+  items.forEach(i => obs.observe(i));
+}
+
+/* ===================== CARDS ===================== */
+function initCards(){
+  document.querySelectorAll('.land-card button').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const card = btn.closest('.land-card');
+      const open = card.getAttribute('data-open') === 'true';
+      card.setAttribute('data-open', !open);
+      btn.setAttribute('aria-expanded', !open);
+    });
+  });
+}
+
+/* ===================== HOTSPOTS ===================== */
+function initHotspots(){
+  const dots = document.querySelectorAll('.hotspot');
+  const title = document.getElementById('hotspot-title');
+  const text = document.getElementById('hotspot-text');
+  dots.forEach(dot => {
+    dot.addEventListener('click', () => {
+      dots.forEach(d => d.classList.remove('is-active'));
+      dot.classList.add('is-active');
+      title.textContent = dot.dataset.title;
+      text.textContent = dot.dataset.text;
+    });
+  });
+}
+
+/* ===================== THREAT QUIZ ===================== */
+function initThreatQuiz(){
+  const items = document.querySelectorAll('#threat-list .threat-item');
+  const scoreEl = document.getElementById('threat-score');
+  let score = 0;
+  items.forEach(item => {
+    const answer = item.dataset.answer;
+    const buttons = item.querySelectorAll('button');
+    const feedback = item.querySelector('.threat-feedback');
+    buttons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        if(btn.classList.contains('chosen') || item.classList.contains('is-correct') || item.classList.contains('is-wrong')) return;
+        buttons.forEach(b => b.disabled = true);
+        btn.classList.add('chosen');
+        const correct = btn.dataset.choice === answer;
+        item.classList.add(correct ? 'is-correct' : 'is-wrong');
+        feedback.textContent = correct ? '✅ Zgadza się' : '⚠️ ' + (answer === 'pomaga' ? 'To pomaga' : 'To szkodzi');
+        if(correct) score++;
+        scoreEl.textContent = score + ' / ' + items.length;
+      });
+    });
+  });
+}
+
+/* ===================== MAP ===================== */
+function initMap(){
+  const pins = document.querySelectorAll('.map-pin');
+  const title = document.getElementById('map-title');
+  const text = document.getElementById('map-text');
+  pins.forEach(pin => {
+    pin.addEventListener('click', () => {
+      pins.forEach(p => p.classList.remove('is-active'));
+      pin.classList.add('is-active');
+      title.textContent = pin.dataset.title;
+      text.textContent = pin.dataset.text;
+    });
+  });
+}
+
+/* ===================== BEFORE / AFTER ===================== */
+function initSlider(){
+  const range = document.getElementById('ba-range');
+  const after = document.getElementById('ba-after');
+  function update(){
+    after.style.width = range.value + '%';
+  }
+  range.addEventListener('input', update);
+  update();
+}
+
+/* ===================== ECO FARM ===================== */
+function initEcoFarm(){
+  const rows = document.querySelectorAll('.choice-row');
+  const fill = document.getElementById('eco-fill');
+  const text = document.getElementById('eco-text');
+  function recompute(){
+    let total = 0, max = rows.length;
+    rows.forEach(row => {
+      const pressed = row.querySelector('[aria-pressed="true"]');
+      if(pressed) total += Number(pressed.dataset.eco);
+    });
+    const pct = Math.round((total/max)*100);
+    fill.style.width = pct + '%';
+    let msg;
+    if(total === 0) msg = 'Wybierz opcje, aby zobaczyć, jak ekologiczne jest Twoje gospodarstwo.';
+    else if(pct < 50) msg = 'Gospodarstwo intensywne – jest tu jeszcze dużo do zmiany.';
+    else if(pct < 100) msg = 'Dobry kierunek! Twoje gospodarstwo staje się coraz bardziej ekologiczne.';
+    else msg = 'Gospodarstwo w pełni ekologiczne! Dbasz o glebę, wodę i bioróżnorodność.';
+    text.textContent = msg + ' (' + pct + '% praktyk ekologicznych)';
+  }
+  rows.forEach(row => {
+    const btns = row.querySelectorAll('.choice-btn');
+    btns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        btns.forEach(b => b.setAttribute('aria-pressed','false'));
+        btn.setAttribute('aria-pressed','true');
+        recompute();
+      });
+    });
+  });
+}
+
+/* ===================== GALLERY ===================== */
+const galleryData = [
+  {id:'img-gallery-1', src:'obraz6.jpg', alt:'panorama gór i lasów (krajobraz naturalny)', cat:'naturalny', caption:'Krajobraz naturalny – góry i lasy'},
+  {id:'img-gallery-2', src:'obraz7.jpg!d', alt:'jezioro i podmokłe łąki (krajobraz naturalny)', cat:'naturalny', caption:'Krajobraz naturalny – jezioro i łąki'},
+  {id:'img-gallery-3', src:'obraz8.avif', alt:'panorama miasta z wieżowcami (krajobraz miejski)', cat:'miejski', caption:'Krajobraz miejski – centrum miasta'},
+  {id:'img-gallery-4', src:'obraz9.webp', alt:'osiedle mieszkaniowe z ulicami (krajobraz miejski)', cat:'miejski', caption:'Krajobraz miejski – osiedle'},
+  {id:'img-gallery-5', src:'obraz10.jpg', alt:'stare miasteczko z zabytkową zabudową (krajobraz kulturowy)', cat:'kulturowy', caption:'Krajobraz kulturowy – stare miasteczko'},
+  {id:'img-gallery-6', src:'obraz11.jpg', alt:'zabytkowy dwór i aleja drzew (krajobraz kulturowy)', cat:'kulturowy', caption:'Krajobraz kulturowy – dwór i aleja'},
+  {id:'img-gallery-7', src:'obraz12.jpg', alt:'pola uprawne w pasach (krajobraz rolniczy)', cat:'rolniczy', caption:'Krajobraz rolniczy – pola w pasach'},
+  {id:'img-gallery-8', src:'obraz13.jfif', alt:'sad i pastwisko ze zwierzętami (krajobraz rolniczy)', cat:'rolniczy', caption:'Krajobraz rolniczy – sad i pastwisko'}
+];
+
+function makePhotoSlot(id, src, alt, ratioClass){
+  const div = document.createElement('div');
+  div.className = 'photo-slot ' + (ratioClass||'') + ' reveal';
+  div.id = id;
+  const img = document.createElement('img');
+  img.src = src;
+  img.alt = alt;
+  div.appendChild(img);
+  return div;
+}
+
+function initGallery(){
+  const grid = document.getElementById('gallery-grid');
+  galleryData.forEach(item => {
+    const fig = document.createElement('figure');
+    fig.className = 'gallery-item';
+    fig.dataset.cat = item.cat;
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.style.width = '100%';
+    btn.style.background = 'none';
+    btn.style.border = 'none';
+    btn.style.padding = '0';
+    btn.style.cursor = 'pointer';
+    btn.appendChild(makePhotoSlot(item.id, item.src, item.alt));
+    btn.addEventListener('click', () => openLightbox(item));
+    const caption = document.createElement('figcaption');
+    caption.textContent = item.caption;
+    fig.appendChild(btn);
+    fig.appendChild(caption);
+    grid.appendChild(fig);
+  });
+  initReveal();
+
+  document.getElementById('gallery-filters').addEventListener('click', e => {
+    const btn = e.target.closest('.filter-btn');
+    if(!btn) return;
+    document.querySelectorAll('.filter-btn').forEach(b => b.setAttribute('aria-pressed','false'));
+    btn.setAttribute('aria-pressed','true');
+    const filter = btn.dataset.filter;
+    document.querySelectorAll('.gallery-item').forEach(item => {
+      item.classList.toggle('is-hidden', filter !== 'all' && item.dataset.cat !== filter);
+    });
+  });
+}
+
+function openLightbox(item){
+  const box = document.getElementById('lightbox');
+  const photoContainer = document.getElementById('lightbox-photo');
+  photoContainer.innerHTML = '';
+  const img = document.createElement('img');
+  img.src = item.src;
+  img.alt = item.alt;
+  photoContainer.appendChild(img);
+  document.getElementById('lightbox-caption').textContent = item.caption;
+  box.classList.add('is-open');
+}
+
+function initLightbox(){
+  const box = document.getElementById('lightbox');
+  document.getElementById('lightbox-close').addEventListener('click', () => box.classList.remove('is-open'));
+  box.addEventListener('click', e => { if(e.target === box) box.classList.remove('is-open'); });
+  document.addEventListener('keydown', e => { if(e.key === 'Escape') box.classList.remove('is-open'); });
+}
+
+/* ===================== FINAL QUIZ ===================== */
+function initFinalQuiz(){
+  const form = document.getElementById('final-quiz');
+  const result = document.getElementById('quiz-result');
+  const scoreEl = document.getElementById('quiz-score');
+  const feedbackEl = document.getElementById('quiz-feedback');
+  const badge = document.getElementById('quiz-badge');
+  const retry = document.getElementById('quiz-retry');
+
+  form.addEventListener('submit', e => {
+    e.preventDefault();
+    const names = ['q1','q2','q3','q4'];
+    let answered = 0, correct = 0;
+    names.forEach(name => {
+      const checked = form.querySelector('input[name="' + name + '"]:checked');
+      if(checked){ answered++; if(checked.value === '1') correct++; }
+    });
+    if(answered < names.length){
+      feedbackEl.textContent = 'Odpowiedz na wszystkie pytania, aby zobaczyć wynik.';
+      result.classList.add('is-visible');
+      scoreEl.textContent = '–';
+      badge.style.display = 'none';
+      return;
+    }
+    const pct = Math.round((correct/names.length)*100);
+    scoreEl.textContent = pct + '%';
+    if(pct === 100){
+      feedbackEl.textContent = 'Strażnik Krajobrazu! Świetna robota – znasz temat na wylot.';
+      badge.style.display = 'block';
+    } else if(pct >= 50){
+      feedbackEl.textContent = 'Dobry wynik! Jeszcze chwila i będziesz ekspertem krajobrazu.';
+      badge.style.display = 'none';
+    } else {
+      feedbackEl.textContent = 'Warto wrócić do materiału na stronie i spróbować jeszcze raz.';
+      badge.style.display = 'none';
+    }
+    result.classList.add('is-visible');
+  });
+
+  retry.addEventListener('click', () => {
+    form.reset();
+    result.classList.remove('is-visible');
+  });
+}
+
+/* ===================== INIT ===================== */
+document.addEventListener('DOMContentLoaded', () => {
+  initNav();
+  initCards();
+  initHotspots();
+  initThreatQuiz();
+  initMap();
+  initSlider();
+  initEcoFarm();
+  initGallery();
+  initLightbox();
+  initFinalQuiz();
+  initReveal();
+});
+</script>
+</body>
+</html>
